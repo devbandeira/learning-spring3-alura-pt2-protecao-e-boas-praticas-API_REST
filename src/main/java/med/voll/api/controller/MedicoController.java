@@ -56,7 +56,11 @@ public class MedicoController {
 
         /*Percebo que tem esse role no metodo CADASTRAR: Devolver codigo 201, cabecalho location com a URI e devolver no corpo da resposta uma representacao do recurso recem criado*/
         /*Percebo tambem a ordem em que foi feita para quando chegar na hora de gerar a var URI -> Meu medico ja foi salva anteriormente no BD atravaes do repository.save(medico)*/
-        
+
+
+        /*Se eu olhar o Header que retornou na requisicao ele vai retornar o LACATION: http://localhost:8080/medicos/6, mas se eu entrar nessa URL nao vai retornar nada Codigo 404.
+        *Pq n criamos uma requisicao para detalhar os DADOS MEDICOS.
+        * */
     }
 
     @GetMapping
