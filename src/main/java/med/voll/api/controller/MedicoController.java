@@ -26,14 +26,37 @@ public class MedicoController {
     public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroMedico dados, UriComponentsBuilder uriBuilder) {
         /*O cadastro vai ser um pouco diferente pq existe um codigo 201 "Requisicao processada e novo recurso criado
         * . E esse codigo tem um tratamento especial. E vamos utilizar aqui tbm o que foi criado par ao atualizar
-        * o DTO "DadosDetalhamentoMedico" 
+        * o DTO "DadosDetalhamentoMedico"
         * */
+
+        /*De acordo com o PROTOCOLO HTTP: Qnd estamos postando uma informacao em uma api, o codigo HTTP que deve ser devolvido e o 201"Created"
+        * Mas esse codigo tem algumas regras, na RESPOSTA temos que devolver o CODIGO 201 e devolver no CORPO DA RESPOSTA os dados do NOVO RECURSO/REGISTRO criado.
+        * E devolver tambem um cabecalho do protocolo HTTP chamado location. Cabecalho que mostra o endereco para que o FRONT consigo acessar esse recurso que acabou de ser cadastrado.
+        * */
+
+
         var medico = new Medico(dados);
         repository.save(medico);
 
         var uri = uriBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();
 
+        /*Comando CREATED(URI) que tenho que passar para ele uma URI que representa o endereco e o SPRING VAI CRIAR UM "CABECALHO LOCATION" automaticamente baseado na uri que passar como parametro.
+        * Na sequencia .body() para eu passar o body com a informacao que eu quero devolver no corpo da resposta e ai ele cria o objeto RESPONSENTITY e no body passo nosso parametro DTO.
+        * Crio a VAR URI -> A uri tem que ser o endereco da nossa API nesse caso http://localhost../medicos/idDoMEdicoQueAcabouDeSerCriadoNoBD. Entao para encapsular
+        * para esconder o negocio da URI e nao ter que ficar controlando quando mudar a URI de local para producao. O SPRING ja tem uma classe que encapsula uma classe da API e ela ja faz a cosntrucao da URI automatica.
+        * Para usar essa CLASSE NO METODO CADASTRAR eu vou por mais um parametro "UriComponentsBuilder uriBuilder". Basta receber esse parametro no metodo CONTROLER que o SPRING vai passar a URI sozinho.
+        * ...Logo "var uri = uriBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();"
+        * -> path() para passar o complemento da URL porque ele so vai criar a URI"localhost:8080" e ai vou colocar o complemento "/medicos/{id}" e na sequencia eu tenho que substituir esse ID pelo ID do medico que acabou de ser criado no BD.
+        * .buildAndExpand() e passo o ID do medico que acabou de ser criado no BD. A o ID ta no repository.save() que foi onde mandei ele salvar no BD. Como passei anteriormente dentro do save (new Medico(dados)); Vou desacoplar.
+        * jogando para uma variavel.
+        * E passo no .buildAndExpand(medico.getID()) que o ID vai ser gerado na linha anterior pelo BD automaticamente.
+        * E Na sequencia chamo o .toUri(); que ele gera a URI.*/
         return ResponseEntity.created(uri).body(new DadosDetalhamentoMedico(medico));
+        /* Entao passo isso tudo para o nosso return*/
+
+        /*Percebo que tem esse role no metodo CADASTRAR: Devolver codigo 201, cabecalho location com a URI e devolver no corpo da resposta uma representacao do recurso recem criado*/
+        /*Percebo tambem a ordem em que foi feita para quando chegar na hora de gerar a var URI -> Meu medico ja foi salva anteriormente no BD atravaes do repository.save(medico)*/
+        
     }
 
     @GetMapping
