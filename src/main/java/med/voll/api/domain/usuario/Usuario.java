@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 /*SPRINGSECURITY 1 - E uma Entidade JPA*/
+/*Cada entidade JPA vai ter um REPOSITORY que e a INTERFACE QUE FAZ O ACESSO AO BANCO DE DADOS DAQUELA TABELA daquela entidade em especifico*/
 @Table(name = "usuarios")
 @Entity(name = "Usuario")
 @Getter
