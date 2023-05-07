@@ -11,13 +11,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-
+/*SPRINGSECURITY 1 - E uma Entidade JPA*/
 @Table(name = "usuarios")
 @Entity(name = "Usuario")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+/*SPRINGSECURITY - Automaticamente ela vai estar representando uma tabela no nosso banco de dados e entao preciso ter uma tabela no meu BD entao vou usar as migrations para criar a tabela no DB*/
 public class Usuario implements UserDetails {
 
     @Id
