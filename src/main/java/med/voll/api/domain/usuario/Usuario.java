@@ -21,7 +21,15 @@ import java.util.List;
 @EqualsAndHashCode(of = "id")
 /*SPRINGSECURITY - Automaticamente ela vai estar representando uma tabela no nosso banco de dados e entao preciso ter uma tabela no meu BD entao vou usar as migrations para criar a tabela no DB*/
 public class Usuario implements UserDetails {
-
+/*configurando: implementando uma interface para o Spring Security (UserDetails). Para o spring reconhecer nossa classe Usuario
+* do nosso projeto. Ele precisa saber que o atributo login e o campo Login, etc.
+* Fizeram um jeito dele entender isso. E a classe que representa o usuario e a classe ""UserDetails"", que e uma interface do proprio spring security e preciso implementar os metodos
+* E mudar tudo que tem return false para TRUE, boto tudo true. Se eu quiser controlar se o usuario tem data de expiracao, se o usuario da bloqueado, etc.
+* eu crio atributos e retorno os atributos especificos que representam essas informacoes. Mas aqui vou deixar tudo true
+* Temos tambem o getPassword e GetUsername que return para eles o nome dos atributos de cada um.
+* GetAuthorities -> Se eu quiser dar autorizacoes, se eu tiver perfil adm, perfil moderador, etc....Preciso cirar uma classe
+* que represente esses perfis, nao vamos usar aqui, mas o spring nos obriga a retornar uma colecao de perfil.
+* Entao vamos simular uma: list.of(new SimpleGrantedAuthority("ROLE_USER")) (fim da aula 29(controller de autenticacao) config basico do spring security)*/
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -45,15 +45,20 @@ public class SecurityConfigurations {
                 .build();
     }
 
-    @Bean
+    /*Criando este metodo para o spring entender como ele pode injetar o objeto, por tambem anotacao BEAN. Ele vai injetar no AuthenticacaoController*/
+    @Bean/*@Bean serve para exportar uma classe para o Spring, fazendo com que ele consiga carrega-la e realize a sua injecao de dependencia em outras classes.*/
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
+        return configuration.getAuthenticationManager();/*esse metodo tem essa classe(getAuthenticationManager) que sabe criar o objeto AuthenticationManager
+        */
     }
 
+
+    /*SPRING SECURIRY - 8 ou 7: PasswordEncoder classe que representa o algoritmo em hash de senha*/
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    /*BCryptPasswordEncoder classe do proprio string que conseguimos instanciar igual classe java*/
 
 
 }
