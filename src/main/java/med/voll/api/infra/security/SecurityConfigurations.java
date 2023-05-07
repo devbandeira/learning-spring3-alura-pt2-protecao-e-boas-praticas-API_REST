@@ -1,5 +1,7 @@
 package med.voll.api.infra.security;
 
+
+/*SPRING SECURIRY - 6 : Aqui nessa classe vamos concentrar as configuracoes de seguranca*/
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,14 +16,25 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration
-@EnableWebSecurity
+@Configuration /*Como e uma classe de configuracoes, boto essa anotacao para o spring*/
+@EnableWebSecurity /*Configurar de seguranca, personalizar o o processo de autenticacao e autorizacao anotacao do spring security*/
 public class SecurityConfigurations {
 
     @Autowired
     private SecurityFilter securityFilter;
 
-    @Bean
+    /*A primeira configuracao que queremos fazer aqui e para ela deixar de ser statefull para ser stateless*/
+    /*Entao vou declarar um metodo que seu retorno vai ser um proprio objeto do Spring ""SecurityFilterChain"" (usamos para configurar coisas relacionadas a processo de autenticacao e tbm autorizacao.
+    * Mos nao vamos instanciar o objeto SecurityFilterChain, nos parametros vou receber outra classe do spring ""HttpSecurity"".
+    * Dentro do metodo eu boto um erturn que o meu parametro retun ""http"" e o proprio spring que fornece esse parametro para gente e ele tem alguns metodos para fazer algumas configuracoes para nos
+    * e no final ele tem um metodo build() que cria o objeto ""SecurityFilterChain"".
+    * -- csrf().disable() -> Desabilita ataques do tipo Cross-Site Request Forgert CSRF. Como vamos trabalhar com tokens o proprio token ja e uma protecao contra o CSRF.
+    * -- .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) -> Configurando para ser Stateless. sessionManagement(). sistema de geranciacao de sessoo. sessionCreationPolicy() politica de criacao de sessao. Passa como parametro o objeto estatico STATELESS. STALESS PQ E UMA API REST
+    * -- .build() -> Configurado ate aqui, ele nao vai ter mais o mesmo comportamento e ele nao vai fornecer a tela de login e bloquear todas as requisicoes isso vai ficar a cargo da nossa aplicacao frontend.
+    * --
+    * --
+    * */
+    @Bean/* Anotacao para exportar o retorno desse metodo para o SPRING. Devolver um objeto para o spring*/
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
