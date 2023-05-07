@@ -100,7 +100,11 @@ public class MedicoController {
 
     @GetMapping("/{id}")
     public ResponseEntity detalhar(@PathVariable Long id) {
-        var medico = repository.getReferenceById(id);
+        /*A forma tradicional de fazer esse erro retornar o erro correto 404 e usar o trycatch, mas fazer isso eu estaria apenas tratando o erro dentro desse metodo so que essa mesma exception pode acontecer em outros metodos alem do CONTROLER aqui de MEDICOS, ao inves de criar em cada controler poluindo.. vou enta*/
+        /*Para nao poluir nosso controller, podemos usar outro recurso do spring e isolar esse tipo de tratamento de erros. A ideia e criar uma classe e la ter um metodo que vai ser responsavel por tratar esse tipo de erro e dentro do main.java no pacote principal temos (endereco, medico e paciente) esses sao do dominio da aplicacao entao vamos isolar eles em um pacote chamado DOMAIN. E crio um terceiro
+        * pacote chamado INFRA e dentro dele crio a classe que vai tratar os erros TRATADORDEERROS. Aqui tera os tratamentos isolados. Ate entao e uma classe que nao tem nada a ver com o SPRING, ele nao vai carregar essa classe. Entao vou usar a anotacao para tratar error "@RestControllerAdvice" e dentro dela vou criar um metodo que vai lidar com aquela exception (ENPITYNOTFOUND EXCEPTION) tratarErro404(){} e anotar ele com
+        * @ExceptionHandler(EntityNotFoundException.class) e dentro da anotacao passo como parametro o erro que vai ser tratado. ENTAO O SPRING JA SABE QUE EM QUALQUER DO NOSSO PROJETO FOR LANCADO UMA EXCEPTION ENTITYNOTFOUND ele vai chamar esse metodo TratarErro404(){} e o tipo de retorno (void n vai ser void)do metodo vai ser ResponseEntity que e o mesmo que usamos no controller que vai ter um return ResponseEntiry.notFound().build(); para ele criar o objeto ResponseEntity*/
+        var medico = repository.getReferenceById(id);/*Aqui esta o problema, se eu passar no metodo um ID que nao existe. Ele lanca uma exception ENPITY NOT FOUND. Como n fizemos o tratamento com um trycatcg, a exception aconteceu nessa linha, foi lancada pro spring e o spring por padrao, excecoes nao tratadas no codigo sao interpretadas pelo spring boot como erro 500 como resposta pro cliente*/
         return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
     }
 
