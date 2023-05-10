@@ -34,11 +34,12 @@ public class AutenticacaoController {
         var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());/*esse token e o LOGIN e SENHA e ele ja esta representado no meu DTO DadosAutenticacao*//*Mas esse DTO n e um parametro que o SPRING espera, ele espera uma outra classe dele, nao uma classe do nosso projeto.
         Entao vamos criar uma classe que representa o usuario e a senha.*/ /*Criando a variavel authenticationToken : Digo "Converte do nosso DTO para esse UsernamePasswordAuthenticationToken que e como se fosse um DTO do proprio spring*/
         var authentication = manager.authenticate(authenticationToken);/*chamar o obj manager,authenticate(um objeto do tipo UsernamePasswordAuthenticationToken)*/
+/*se der erro ao achar o usuario, ele nao passa da linha manager.authenticate(), retorna erro 403 e n gera o TOKEN*/
 
-        var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
+        var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());/*Nosso Controller aqui gera o token, recebe o token de volta e devolve isso em um DTO no return*/
 
         /*JWT 3 -> Vou injetar a classe TokenService e chamar o metodo para gerar o JWT.*/
-        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
+        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));/*Passando um DTO - Assim retorna para a aplicacao front um token json*/
         /*Se eu rodar o programa  return ResponseEntity.ok().build(); ele vai dar erro, pois ele nao vai encontrar o nosso ""AuthenticationManager manager"", vai dar erro no campo managem, na classe AutenticacaoController requer um BEAN do tipo AuthenticationManager que nao pode ser encontrado
         * entao, nao conseguiu injetar o atributo MANAGER na nossa classe controller.
         * Essa classe AuthenticationManager e do proprio spring, porem ele nao sabe injetar automaticamente um objeto AuthenticationManager. Temos que configurar.

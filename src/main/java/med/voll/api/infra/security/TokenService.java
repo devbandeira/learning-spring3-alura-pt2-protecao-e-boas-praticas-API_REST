@@ -15,8 +15,8 @@ import java.time.ZoneOffset;
 @Service/*Como representa um servico, anoto com @Service*/
 public class TokenService {
 
-    @Value("${api.security.token.secret}")
-    private String secret;
+    @Value("${api.security.token.secret}")/*Dizendo para o spring boot ler um atributo de uma classe, para ler do aplication.properties. CUIDADO tem 2 VALUES para importar LOMBOK e SPRING, USAR DO SPRING!!!!*/
+    private String secret;/*JWT 4 - Como isso e uma configuracao da nossa aplicacao, podemos por no aplication.properties. E eu consigo ler uma propriedade declarada dentro do aplication.properties em uma classe java*/
 
     /*Metodo para gerar TOKEN que retorna uma String pq o TOKEN e uma string.
     * Dentro do metodo vamos utilizar a biblioteca que add no projeto.
