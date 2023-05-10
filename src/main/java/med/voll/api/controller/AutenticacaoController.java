@@ -24,6 +24,8 @@ public class AutenticacaoController {
     @Autowired
     private AuthenticationManager manager;
 
+    /*JWT 3 -> Vou injetar a classe TokenService e chamar o metodo para gerar o JWT. Tomar cuidado que o Spring
+    * tem uma classe chamada TokenService, observar de importar a nossa criada pelo nosso projeto*/
     @Autowired
     private TokenService tokenService;
 
@@ -35,11 +37,17 @@ public class AutenticacaoController {
 
         var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
 
+        /*JWT 3 -> Vou injetar a classe TokenService e chamar o metodo para gerar o JWT.*/
         return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
         /*Se eu rodar o programa  return ResponseEntity.ok().build(); ele vai dar erro, pois ele nao vai encontrar o nosso ""AuthenticationManager manager"", vai dar erro no campo managem, na classe AutenticacaoController requer um BEAN do tipo AuthenticationManager que nao pode ser encontrado
         * entao, nao conseguiu injetar o atributo MANAGER na nossa classe controller.
         * Essa classe AuthenticationManager e do proprio spring, porem ele nao sabe injetar automaticamente um objeto AuthenticationManager. Temos que configurar.
         * La na classe SecurityConfigurations.  */
+        /*se as credencias enviadas pelo front end quando consultada no BD existir, retornaremos o JWT, caso nao existe, retornaremos um 403 pois no processo de autenticacao o spring n achou o usuario enviado pela requisicao*/
+
+        /*JWT 1: Quando o usuario for logar, aqui vai acontecer a requisicao do /LOGIN e preciso passar no return um TOKENJWT
+        * crio entao o tokenJWT para passar no retur
+        * Para acessar e por a lib para gerar JWT: jwt.io (site e pesquisa por libs para java)n*/
     }
 
 }
