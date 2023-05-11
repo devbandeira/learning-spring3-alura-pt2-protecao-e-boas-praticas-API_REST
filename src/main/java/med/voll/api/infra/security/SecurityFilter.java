@@ -27,8 +27,8 @@ public class SecurityFilter extends OncePerRequestFilter {/*ao inves de usar Fil
     /*metodo que o spring vai chamar quando esse filtro for executado. Esse metodo e criado devido a HERANCA*/
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {/*Esse metodo implementado recebe 3 parametros: request (pegamos coisas da requisicao), response(enviar coisas na resposta), filterChain(representa a cadeira de filtros que existe na aplicacao. Uso o filterChain para chamar o proximo filtro, pois se eu nao chamar o proximo passo/filtro nao me retorna nada, mas execita*/
-        var tokenJWT = recuperarToken(request);
-
+        var tokenJWT = recuperarToken(request);/*para recuperar o TOKEN. Criei um metodo recuperarTOKEN() ele cria dentro da propria classe SecurityFilter */
+        /*System.out.println(tokenJWT); somente para ver se dava pra recuperar algo do cabecalho token Authorization qnd receber requisicoes*/
         if (tokenJWT != null) {
             var subject = tokenService.getSubject(tokenJWT);
             var usuario = repository.findByLogin(subject);
@@ -42,10 +42,10 @@ public class SecurityFilter extends OncePerRequestFilter {/*ao inves de usar Fil
         FilterChain.doFilter(request, response): necessario para chamar os proximos filtros na aplicacao. PRECISO GARANTIR QUE ESSA LINHA SUPERIOR ESTEJA*/
     }
 
-    private String recuperarToken(HttpServletRequest request) {
-        var authorizationHeader = request.getHeader("Authorization");
+    private String recuperarToken(HttpServletRequest request) {/*esse metodo eu passo para ele o request e ele vai me retornar a string do token*/
+        var authorizationHeader = request.getHeader("Authorization");/*para pegar/recuperar o cabecalho eu vou jgoar isso em uma variavel. O metodo getHeader(Recebe uma string com o nome do cabecalho). Se n existir o cabecalho, vai me devolver um null*/
         if (authorizationHeader != null) {
-            return authorizationHeader.replace("Bearer ", "");
+            return authorizationHeader.replace("Bearer ", "");/*PEga o token que vem do cabecalho e substitui o bearer(tipo de token) que vem do cabecalho como prefixo e substitui pro ""*/
         }
 
         return null;
